@@ -33,7 +33,7 @@ const Add = ({ token }) => {
   const sizeOptions = {
     "Storage & organisation": ["SMALL", "MEDIUM", "LARGE"],
     "Furniture": ["SMALL", "MEDIUM", "LARGE", "EXTRA LARGE"],
-    "Sofas & armchairs": ["2-SEATER", "3-SEATER", "4-SEATER"],
+    "Sofas & armchairs": ["1-SEATER","2-SEATER", "3-SEATER", "4-SEATER"],
     "Office furniture": ["STANDARD", "LARGE"],
     "Beds & mattresses": ["SINGLE", "DOUBLE", "KING", "QUEEN"],
     "Outdoor products": ["COMPACT", "MEDIUM", "LARGE"],
