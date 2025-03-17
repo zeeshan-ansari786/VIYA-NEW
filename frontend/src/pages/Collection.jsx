@@ -14,7 +14,7 @@ const Collection = () => {
 
   const categoryList = {
     "Storage & Organisation": ["Bookcases & Shelving Units", "Storage Solution Systems", "Cabinets & Media Furniture"],
-    "Furniture": ["Tables & Desks", "Chairs", "Wardrobes & Dressers"],
+    "Furniture": ["Tables & Chairs", "Desks", "Wardrobes & Dressers"],
     "Sofas & Armchairs": ["Recliners", "Sectional Sofas", "Loveseats"],
     "Office Furniture": ["Office Chairs", "Office Desks", "Filing Cabinets"],
     "Beds & Mattresses": ["Single Beds", "Double Beds", "Memory Foam Mattresses"],

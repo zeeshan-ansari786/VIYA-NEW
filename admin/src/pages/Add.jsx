@@ -22,7 +22,7 @@ const Add = ({ token }) => {
   // Category-wise subcategory mapping
   const subCategories = {
     "Storage & organisation": ["Bookcases & Shelving Units", "Storage Solution Systems", "Cabinets & Media Furniture"],
-    "Furniture": ["Tables & Desks", "Chairs", "Wardrobes & Dressers"],
+    "Furniture": ["Tables & Chairs", "Desks", "Wardrobes & Dressers"],
     "Sofas & armchairs": ["Recliners", "Sectional Sofas", "Loveseats"],
     "Office furniture": ["Office Chairs", "Office Desks", "Filing Cabinets"],
     "Beds & mattresses": ["Single Beds", "Double Beds", "Memory Foam Mattresses"],
