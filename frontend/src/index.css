@@ -55,14 +55,14 @@ body {
   background: white;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   overflow: hidden;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* ======= Product Image Styling ======= */
@@ -74,7 +74,7 @@ body {
   transition: opacity 0.3s ease-in-out;
 }
 
-/* ======= Show Details on Hover ======= */
+/* ======= Hover Effect for Details ======= */
 .product-details {
   position: absolute;
   bottom: 0;
@@ -91,6 +91,15 @@ body {
 .product-card:hover .product-details {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ======= Price Styling (Always Visible) ======= */
+.product-price {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 8px; /* Space between image and price */
 }
 
 /* ======= Badge for Low Image Warning ======= */
@@ -123,6 +132,95 @@ body {
 .footer a:hover {
   text-decoration: underline;
 }
+/* ======= Stylish Search Bar ======= */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  max-width: 600px;
+  background: #fff;
+  border-radius: 50px;
+  padding: 12px 20px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.search-box:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  background: transparent;
+  padding: 8px;
+}
+
+.search-input::placeholder {
+  color: #888;
+  font-size: 14px;
+}
+
+.search-icon {
+  font-size: 18px;
+  color: #007BFF;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.clear-icon {
+  font-size: 16px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.clear-icon:hover {
+  color: #d9534f;
+}
+
+.close-icon {
+  font-size: 20px;
+  color: #555;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.close-icon:hover {
+  color: #d9534f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-box {
+      width: 80%;
+      padding: 10px 15px;
+  }
+
+  .search-input {
+      font-size: 14px;
+  }
+
+  .search-icon,
+  .clear-icon,
+  .close-icon {
+      font-size: 16px;
+  }
+}
 
 /* ======= Responsive Design ======= */
 @media (max-width: 768px) {
@@ -134,7 +232,7 @@ body {
       padding: 10px 16px;
   }
 
-  .card {
+  .product-card {
       padding: 15px;
   }
 }
