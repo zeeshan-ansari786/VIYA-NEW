@@ -5,10 +5,10 @@ import { backendUrl } from "../App";
 import { toast } from "react-toastify";
 
 const Add = ({ token }) => {
-  const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+  const [image4, setImage4] = useState(null);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -17,34 +17,38 @@ const Add = ({ token }) => {
   const [subCategory, setSubCategory] = useState("");
   const [bestseller, setBestseller] = useState(false);
   const [sizes, setSizes] = useState([]);
-  const [availableSizes, setAvailableSizes] = useState([]); // Dynamically updates available sizes
 
-  // Category-wise subcategory mapping
-  const subCategories = {
-    "Storage & organisation": ["Bookcases & Shelving Units", "Storage Solution Systems", "Cabinets & Media Furniture"],
-    "Furniture": ["Tables & Chairs", "Desks", "Wardrobes & Dressers"],
-    "Sofas & armchairs": ["Recliners", "Sectional Sofas", "Loveseats"],
-    "Office furniture": ["Office Chairs", "Office Desks", "Filing Cabinets"],
-    "Beds & mattresses": ["Single Beds", "Double Beds", "Memory Foam Mattresses"],
-    "Outdoor products": ["Garden Furniture", "Hammocks", "Outdoor Storage"],
+  // Category & Size Mapping
+  const categories = {
+    "Storage & Organisation": ["Bookcases", "Shelving", "Cabinets"],
+    "Furniture": ["Tables", "Chairs", "Desks"],
+    "Sofas & Armchairs": ["Recliners", "Sectionals", "Loveseats"],
+    "Office Furniture": ["Office Chairs", "Office Desks", "Cabinets"],
+    "Beds & Mattresses": ["Single Beds", "Double Beds", "Memory Foam"],
+    "Outdoor Products": ["Garden Furniture", "Hammocks", "Storage"],
   };
 
-  // Category-wise available sizes
   const sizeOptions = {
-    "Storage & organisation": ["SMALL", "MEDIUM", "LARGE"],
-    "Furniture": ["SMALL", "MEDIUM", "LARGE", "EXTRA LARGE"],
-    "Sofas & armchairs": ["1-SEATER","2-SEATER", "3-SEATER", "4-SEATER"],
-    "Office furniture": ["STANDARD", "LARGE"],
-    "Beds & mattresses": ["SINGLE", "DOUBLE", "KING", "QUEEN"],
-    "Outdoor products": ["COMPACT", "MEDIUM", "LARGE"],
+    "Storage & Organisation": ["Small", "Medium", "Large"],
+    "Furniture": ["Small", "Medium", "Large", "XL"],
+    "Sofas & Armchairs": ["1-Seater", "2-Seater", "3-Seater"],
+    "Office Furniture": ["Standard", "Large"],
+    "Beds & Mattresses": ["Single", "Double", "King", "Queen"],
+    "Outdoor Products": ["Compact", "Medium", "Large"],
   };
 
-  // Handle category change
   const handleCategoryChange = (selectedCategory) => {
     setCategory(selectedCategory);
-    setSubCategory(""); // Reset subcategory on category change
-    setSizes([]); // Reset selected sizes
-    setAvailableSizes(sizeOptions[selectedCategory] || []); // Update available sizes based on category
+    setSubCategory("");
+    setSizes([]);
+  };
+
+  const toggleSize = (size) => {
+    setSizes((prevSizes) =>
+      prevSizes.includes(size)
+        ? prevSizes.filter((s) => s !== size)
+        : [...prevSizes, size]
+    );
   };
 
   const onSubmitHandler = async (e) => {
@@ -64,7 +68,7 @@ const Add = ({ token }) => {
       image3 && formData.append("image3", image3);
       image4 && formData.append("image4", image4);
 
-      const response = await axios.post(backendUrl + "/api/product/add", formData, {
+      const response = await axios.post(`${backendUrl}/api/product/add`, formData, {
         headers: { token },
       });
 
@@ -72,10 +76,10 @@ const Add = ({ token }) => {
         toast.success(response.data.message);
         setName("");
         setDescription("");
-        setImage1(false);
-        setImage2(false);
-        setImage3(false);
-        setImage4(false);
+        setImage1(null);
+        setImage2(null);
+        setImage3(null);
+        setImage4(null);
         setPrice("");
         setCategory("");
         setSubCategory("");
@@ -85,21 +89,23 @@ const Add = ({ token }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      toast.error("Something went wrong!");
     }
   };
 
   return (
-    <form onSubmit={onSubmitHandler} className="flex flex-col w-full items-start gap-3">
-      {/* Image Upload */}
+    <form
+      onSubmit={onSubmitHandler}
+      className="flex flex-col w-full max-w-2xl mx-auto p-8 bg-gray-100 text-gray-900 rounded-lg shadow-xl"
+    >
+      {/* Upload Image */}
       <div>
-        <p className="mb-2">Upload Image</p>
-        <div className="flex gap-2">
+        <p className="mb-2 font-semibold text-lg text-gray-700">Upload Images</p>
+        <div className="flex gap-3">
           {[1, 2, 3, 4].map((num) => (
-            <label key={num} htmlFor={`image${num}`}>
+            <label key={num} htmlFor={`image${num}`} className="cursor-pointer">
               <img
-                className="w-20"
+                className="w-24 h-24 border-2 border-gray-400 rounded-lg hover:border-blue-500 transition"
                 src={!eval(`image${num}`) ? assets.upload_area : URL.createObjectURL(eval(`image${num}`))}
                 alt=""
               />
@@ -114,28 +120,39 @@ const Add = ({ token }) => {
         </div>
       </div>
 
-      {/* Product Name & Description */}
-      <div className="w-full">
-        <p className="mb-2">Product Name</p>
-        <input onChange={(e) => setName(e.target.value)} value={name} className="w-full max-w-[500px] px-3 py-2" type="text" placeholder="Type here" required />
+      {/* Product Details */}
+      <div>
+        <label className="block text-lg font-medium mt-4 text-gray-700">Product Name</label>
+        <input
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+          className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          type="text"
+          required
+        />
       </div>
 
-      <div className="w-full">
-        <p className="mb-2">Product Description</p>
-        <textarea onChange={(e) => setDescription(e.target.value)} value={description} className="w-full max-w-[500px] px-3 py-2" type="text" placeholder="Write content here" required />
+      <div>
+        <label className="block text-lg font-medium mt-4 text-gray-700">Description</label>
+        <textarea
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+          className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          required
+        />
       </div>
 
-      {/* Category & Subcategory Selection */}
-      <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
-        <div>
-          <p className="mb-2">Product Category</p>
+      {/* Category & Subcategory */}
+      <div className="flex flex-wrap gap-4">
+        <div className="flex-1">
+          <label className="block text-lg font-medium mt-4 text-gray-700">Category</label>
           <select
             onChange={(e) => handleCategoryChange(e.target.value)}
             value={category}
-            className="w-full px-3 py-2"
+            className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           >
-            <option value="">Select Category</option>
-            {Object.keys(subCategories).map((cat) => (
+            <option value="">Select</option>
+            {Object.keys(categories).map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>
@@ -143,56 +160,51 @@ const Add = ({ token }) => {
           </select>
         </div>
 
-        {/* Dynamic Subcategory */}
-        <div>
-          <p className="mb-2">Sub Category</p>
+        <div className="flex-1">
+          <label className="block text-lg font-medium mt-4 text-gray-700">Subcategory</label>
           <select
             onChange={(e) => setSubCategory(e.target.value)}
             value={subCategory}
-            className="w-full px-3 py-2"
+            className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             disabled={!category}
           >
-            <option value="">Select Sub Category</option>
+            <option value="">Select</option>
             {category &&
-              subCategories[category].map((subCat) => (
+              categories[category].map((subCat) => (
                 <option key={subCat} value={subCat}>
                   {subCat}
                 </option>
               ))}
           </select>
         </div>
-
-        {/* Price Input */}
-        <div>
-          <p className="mb-2">Product Price</p>
-          <input onChange={(e) => setPrice(e.target.value)} value={price} className="w-full px-3 py-2 sm:w-[120px]" type="number" placeholder="25" />
-        </div>
       </div>
-
-      {/* Product Sizes - Dynamic Based on Category */}
-      <div>
-        <p className="mb-2">Product Sizes</p>
-        <div className="flex gap-3">
-          {availableSizes.map((size) => (
-            <div key={size} onClick={() => setSizes((prev) =>
-                prev.includes(size) ? prev.filter((item) => item !== size) : [...prev, size]
-              )}
-            >
-              <p className={`${sizes.includes(size) ? "bg-pink-100" : "bg-slate-200"} px-3 py-1 cursor-pointer`}>
-                {size}
-              </p>
-            </div>
-          ))}
-        </div>
+      <div className="flex flex-wrap items-center justify-between mt-4">
+  {/* Size Selection */}
+  {category && sizeOptions[category] && (
+    <div className="flex-1">
+      <p className="text-lg font-medium text-gray-700">Available Sizes</p>
+      <div className="flex flex-wrap gap-4 mt-1">
+        {sizeOptions[category].map((size) => (
+          <label key={size} className="flex items-center gap-2 text-gray-800 text-base">
+            <input type="checkbox" checked={sizes.includes(size)} onChange={() => toggleSize(size)} />
+            {size}
+          </label>
+        ))}
       </div>
-      <div className='flex gap-2 mt-2'>
-          <input onChange={() => setBestseller(prev => !prev)} checked={bestseller} type="checkbox" id='bestseller' />
-          <label className='cursor-pointer' htmlFor="bestseller">Add to bestseller</label>
-        </div>
+    </div>
+  )}
+
+  {/* Bestseller Checkbox (Aligned & Styled) */}
+  <div className="flex items-center mt-6">
+    <input type="checkbox" id="bestseller" checked={bestseller} onChange={() => setBestseller(!bestseller)} />
+    <label htmlFor="bestseller" className="ml-2 text-lg text-gray-700 font-medium">Bestseller</label>
+  </div>
+</div>
+
 
       {/* Submit Button */}
-      <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">
-        ADD
+      <button className="w-full py-3 mt-4 bg-blue-600 hover:bg-blue-500 transition text-white rounded-lg text-lg font-semibold">
+        ADD PRODUCT
       </button>
     </form>
   );
