@@ -208,7 +208,7 @@ body {
   width: 200%;
   height: 200%;
   background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-  animation: move 10s infinite linear;
+  animation: move 5s infinite linear;
 }
 
 @keyframes move {
