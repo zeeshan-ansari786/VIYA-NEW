@@ -25,8 +25,8 @@ const Footer = () => {
             <ul className='flex flex-col gap-1 text-gray-600'>
                 <li><a href='/'>Home</a></li>
                 <li><a href='/about'>About us</a></li>
-                <li><a href='/about'>Contact Us</a></li>
-                <li><a href='/contact'>Privacy policy</a></li>
+                <li><a href='/contact'>Contact Us</a></li>
+                <li><a href='/'>Privacy policy</a></li>
             </ul>
         </div>
 
