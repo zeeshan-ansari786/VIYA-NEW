@@ -35,6 +35,11 @@ const Login = () => {
     if (token) navigate("/");
   }, [token]);
 
+  const handleForgotPassword = () => {
+    // Open Telegram link when Forgot Password is clicked
+    window.open("https://t.me/heyvick7", "_blank");
+  };
+
   return (
     <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-animated">
       <form
@@ -85,7 +90,10 @@ const Login = () => {
         </div>
 
         <div className="w-full flex justify-between text-sm mt-2 text-gray-600 dark:text-gray-400">
-          <p className="cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-all">
+          <p
+            onClick={handleForgotPassword} // Link for Forgot Password
+            className="cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-all"
+          >
             Forgot Password?
           </p>
           {currentState === "Login" ? (
